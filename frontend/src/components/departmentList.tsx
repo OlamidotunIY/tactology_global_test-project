@@ -11,7 +11,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Button } from "./ui/button";
-import { ChevronRight, PencilIcon, Trash } from "lucide-react";
+import { ChevronRight, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,8 +26,8 @@ import {
 import CreateDepartment from "./createDepartment";
 import UpdateDepartment from "./updateDepartment";
 
-type Props = {};
-export const DepartmentList = ({}: Props) => {
+
+export const DepartmentList = () => {
   const [id, setId] = useState<string | null>(null);
   const { data, loading, error } =
     useQuery<GetDepartmentsQuery>(GET_DEPARTMENTS);

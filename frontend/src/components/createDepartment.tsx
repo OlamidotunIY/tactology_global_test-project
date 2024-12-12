@@ -14,7 +14,7 @@ import { DepartmentDto } from "@/gql/graphql";
 import { FieldArray, Formik } from "formik";
 import { InputField } from "./InputField";
 import { useState } from "react";
-import { LucideTrash, PlusIcon, Trash } from "lucide-react";
+import { LucideTrash, PlusIcon } from "lucide-react";
 import { useMutation } from "@apollo/client";
 import { CREATE_DEPARTMENT } from "@/graphql/mutations/createDepartment";
 import { GET_DEPARTMENTS } from "@/graphql/quaries/GetDepartments";
@@ -74,8 +74,6 @@ const CreateDepartment = () => {
             handleChange,
             handleBlur,
             handleSubmit,
-            setFieldValue,
-            /* and other goodies */
           }) => (
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <InputField
@@ -147,7 +145,7 @@ const CreateDepartment = () => {
                 )}
               </FieldArray>
               <DialogFooter>
-                <Button type="submit">Save changes</Button>
+                <Button type="submit" disabled={loading}>Save changes</Button>
               </DialogFooter>
             </form>
           )}

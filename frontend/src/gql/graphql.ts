@@ -8,163 +8,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
-export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
-  DateTime: { input: any; output: any; }
-};
 
-export type Department = {
-  __typename?: 'Department';
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  id?: Maybe<Scalars['ID']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  subDepartments?: Maybe<Array<SubDepartment>>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
-  user?: Maybe<User>;
-};
-
-export type DepartmentDto = {
-  name: Scalars['String']['input'];
-  subDepartment?: InputMaybe<Array<SubDepartmentDto>>;
-};
-
-export type LoginDto = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-export type LoginResponse = {
-  __typename?: 'LoginResponse';
-  user?: Maybe<User>;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  createDepartment: Department;
-  createSubDepartment: SubDepartment;
-  deleteDepartment: Department;
-  deleteSubDepartment: SubDepartment;
-  login: LoginResponse;
-  logout: Scalars['String']['output'];
-  refreshToken: Scalars['String']['output'];
-  register: RegisterResponse;
-  updateDepartment: Department;
-  updateProfile: User;
-  updateSubDepartment: SubDepartment;
-};
-
-
-export type MutationCreateDepartmentArgs = {
-  data: DepartmentDto;
-};
-
-
-export type MutationCreateSubDepartmentArgs = {
-  departmentId: Scalars['Float']['input'];
-  name: Scalars['String']['input'];
-};
-
-
-export type MutationDeleteDepartmentArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type MutationDeleteSubDepartmentArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type MutationLoginArgs = {
-  loginInput: LoginDto;
-};
-
-
-export type MutationRegisterArgs = {
-  registerInput: RegisterDto;
-};
-
-
-export type MutationUpdateDepartmentArgs = {
-  id: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
-
-export type MutationUpdateProfileArgs = {
-  fullname: Scalars['String']['input'];
-};
-
-
-export type MutationUpdateSubDepartmentArgs = {
-  id: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
-export type Query = {
-  __typename?: 'Query';
-  getDepartment: Department;
-  getDepartments: Array<Department>;
-  getSubDepartment: SubDepartment;
-  getSubDepartments: Array<SubDepartment>;
-  hello: Scalars['String']['output'];
-};
-
-
-export type QueryGetDepartmentArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type QueryGetSubDepartmentArgs = {
-  id: Scalars['String']['input'];
-};
-
-
-export type QueryGetSubDepartmentsArgs = {
-  departmentId: Scalars['Float']['input'];
-};
-
-export type RegisterDto = {
-  confirmPassword: Scalars['String']['input'];
-  email: Scalars['String']['input'];
-  fullname: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-export type RegisterResponse = {
-  __typename?: 'RegisterResponse';
-  user?: Maybe<User>;
-};
-
-export type SubDepartment = {
-  __typename?: 'SubDepartment';
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  department?: Maybe<Department>;
-  id?: Maybe<Scalars['ID']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-export type SubDepartmentDto = {
-  department: Scalars['Float']['input'];
-  name: Scalars['String']['input'];
-};
-
-export type User = {
-  __typename?: 'User';
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  email: Scalars['String']['output'];
-  fullname: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
-  password: Scalars['String']['output'];
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
 
 export type LoginUserMutationVariables = Exact<{
   email: Scalars['String']['input'];
@@ -393,9 +237,9 @@ export type SubDepartmentDto = {
 export type User = {
   __typename?: 'User';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
-  email: Scalars['String']['output'];
-  fullname: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
-  password: Scalars['String']['output'];
+  email?: Scalars['String']['output'];
+  fullname?: Scalars['String']['output'];
+  id?: Scalars['Int']['output'];
+  password?: Scalars['String']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };

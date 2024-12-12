@@ -19,7 +19,7 @@ loadErrorMessages();
 loadDevMessages();
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:3500/graphql",
+  uri: "https://tactology-global-test-project.onrender.com/graphql",
   credentials: 'include',
   headers: {
     "Content-Type": "application/json",
