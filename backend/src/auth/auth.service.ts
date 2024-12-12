@@ -77,12 +77,10 @@ export class AuthService {
     response.cookie('access_token', accessToken, {
       httpOnly: true,
       sameSite: 'none',  // Allow cross-origin requests
-      secure: this.configService.get<string>('NODE_ENV') === 'production',  // Ensure cookies are only sent over HTTPS in production
     });
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: this.configService.get<string>('NODE_ENV') === 'production',  // Ensure cookies are only sent over HTTPS in production
       sameSite: 'none',  // Allow cross-origin requests
     });
 
