@@ -77,9 +77,9 @@ input SubDepartmentDto {
 
 type User {
   createdAt: DateTime
-  email: String!
-  fullname: String!
-  id: Int!
-  password: String!
+  email: String
+  fullname: String
+  id: Int
+  password: String
   updatedAt: DateTime
 }
