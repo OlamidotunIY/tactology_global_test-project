@@ -74,10 +74,18 @@ export class AuthService {
       expiresIn: '7d',
     });
 
-    response.cookie('access_token', accessToken, { httpOnly: true });
+    response.cookie('access_token', accessToken, {
+      httpOnly: true,
+      sameSite: 'none',  // Allow cross-origin requests
+      secure: process.env.NODE_ENV === 'production',  // Ensure cookies are only sent over HTTPS in production
+    });
+
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',  // Ensure cookies are only sent over HTTPS in production
+      sameSite: 'none',  // Allow cross-origin requests
     });
+
     return { user };
   }
 
