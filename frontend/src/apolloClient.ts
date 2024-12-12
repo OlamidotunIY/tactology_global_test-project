@@ -27,21 +27,22 @@ const httpLink = createHttpLink({
 });
 
 async function refreshToken(client: ApolloClient<NormalizedCacheObject>) {
-  console.log("refreshing token...");
-  await client.mutate({
-    mutation: gql`
-      mutation RefreshToken {
-        refreshToken
-      }
-    `,
-  }).then((res) => {
-    console.log("res", res);
-    Cookies.set("access_token", res.data.refreshToken, { expires: 1 / 24 });
-    return `Bearer ${res.data.refreshToken}`;
-  }).catch((error) => {
-    console.log("error", error);
-    throw new Error("Refresh token not found");
-  })
+  try {
+    const { data } = await client.mutate({
+      mutation: gql`
+        mutation RefreshToken {
+          refreshToken
+        }
+      `,
+    })
+    const newAccessToken = data?.refreshToken
+    if (!newAccessToken) {
+      throw new Error("New access token not received.")
+    }
+    return `Bearer ${newAccessToken}`
+  } catch (err) {
+    throw new Error("Error getting new access token.")
+  }
 }
 
 let retryCount = 0;
