@@ -12,14 +12,12 @@ import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 import { useUserStore } from "./stores/userStore";
 import { onError } from "@apollo/client/link/error";
 import { GraphQLError } from "graphql";
-import { getMainDefinition } from "@apollo/client/utilities";
-import Cookies from "js-cookie";
 
 loadErrorMessages();
 loadDevMessages();
 
 const httpLink = createHttpLink({
-  uri: "https://tactology-global-test-project.onrender.com/graphql",
+  uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
   credentials: 'include',
   headers: {
     "Content-Type": "application/json",
@@ -84,19 +82,9 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   }
 });
 
-const link = split(
-  // Split based on operation type
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === "OperationDefinition" &&
-      definition.operation === "subscription"
-    );
-  },
-  ApolloLink.from([errorLink])
-);
 
 export const client = new ApolloClient({
-  link: link.concat(httpLink),
+  link: errorLink.concat(httpLink),
   cache: new InMemoryCache({}),
+  credentials: 'include',
 });
