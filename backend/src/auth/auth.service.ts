@@ -76,12 +76,12 @@ export class AuthService {
 
     response.cookie('access_token', accessToken, {
       httpOnly: true,
-      sameSite: 'none',  // Allow cross-origin requests
+      // sameSite: 'none',  // Allow cross-origin requests
     });
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      sameSite: 'none',  // Allow cross-origin requests
+      // sameSite: 'none',  // Allow cross-origin requests
     });
 
     return { user };
