@@ -6,7 +6,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: 'https://tactology-global-test-project.vercel.app',
+    origin: ['https://tactology-global-test-project.vercel.app', 'http://localhost:3000'],
     credentials: true,
 
     allowedHeaders: [
