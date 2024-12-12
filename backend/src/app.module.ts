@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { DepartmentModule } from './department/department.module';
 import { SubDepartmentModule } from './sub-department/sub-department.module';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { TokenService } from './token/token.service';
 
 @Module({
@@ -31,7 +32,25 @@ import { TokenService } from './token/token.service';
           subscriptions: {
             'graphql-ws': true,
             'subscriptions-transport-ws': true,
-          }
+          },
+          onConnect: (connectionParams) => {
+            const token = tokenService.extractToken(connectionParams);
+
+            if (!token) {
+              throw new Error('Token not provided');
+            }
+            const user = tokenService.validateToken(token);
+            if (!user) {
+              throw new Error('Invalid token');
+            }
+            return { user };
+          },
+          context: ({ req, res, connection }) => {
+            if (connection) {
+              return { req, res, user: connection.context.user }; // Injecting pubSub into context
+            }
+            return { req, res };
+          },
         };
       },
     }),
