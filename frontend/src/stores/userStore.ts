@@ -21,8 +21,8 @@ export const useUserStore = create<UserState>()(
         setUser: (user) =>
           set({
             id: user.id || undefined,
-            fullname: user.fullname,
-            email: user.email,
+            fullname: user.fullname as string,
+            email: user.email as string,
           }),
       }),
       {
