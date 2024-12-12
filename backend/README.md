@@ -1,99 +1,227 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# **Backend Setup Instructions**
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Follow these steps to set up and run the backend project:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## **Prerequisites**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Ensure you have the following installed on your machine:
 
-## Project setup
+- [Node.js](https://nodejs.org/) (v14 or higher)
+- [Yarn](https://yarnpkg.com/) (latest stable version)
+- [Docker](https://www.docker.com/) (for containerized services like PostgreSQL)
+- [Prisma CLI](https://www.prisma.io/docs/getting-started/quickstart) (for database migrations)
+
+---
+
+## **Setup Instructions**
+
+### **1. Install Dependencies**
+
+Run the following command to install all project dependencies:
 
 ```bash
-$ yarn install
+yarn install
 ```
 
-## Compile and run the project
+---
+
+### **2. Configure Environment Variables**
+
+- Create a `.env` file in the project root directory (if not already present).
+- Add or update the required environment variables. For example:
+
+  ```env
+  DATABASE_URL=postgresql://<username>:<password>@localhost:5432/<database_name>
+  ACCESS_TOKEN_SECRET=<your_access_token_secret>
+  REFRESH_TOKEN_SECRET=<your_refresh_token_secret>
+  ```
+
+- Replace `<username>`, `<password>`, and `<database_name>` with your PostgreSQL credentials.
+
+---
+
+### **3. Edit `docker-compose.yml`**
+
+- Ensure the `docker-compose.yml` file has the correct configuration for your database and other services.
+- Update any ports, volumes, or environment variables as necessary to match your local setup.
+
+---
+
+### **4. Run Prisma Migrations**
+
+Generate the database schema by running the following command:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+npx prisma migrate dev
 ```
 
-## Run tests
+---
+
+### **5. Start Docker Services**
+
+Start the PostgreSQL and Redis services (or any other dependencies) using Docker:
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+docker-compose up
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### **6. Start the Development Server**
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Run the project in development mode using Yarn:
 
 ```bash
-$ yarn install -g mau
-$ mau deploy
+yarn start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+---
 
-## Resources
+## **API Documentation**
 
-Check out a few resources that may come in handy when working with NestJS:
+### **Mutations**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+1. **Register User**
+   ```graphql
+   mutation RegisterUser {
+       register {
+           user {
+               id
+               fullname
+               email
+           }
+       }
+   }
+   ```
 
-## Support
+2. **Update Profile**
+   ```graphql
+   mutation UpdateProfile($fullname: String!) {
+       updateProfile(fullname: $fullname) {
+           id
+           fullname
+       }
+   }
+   ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+3. **Create Department**
+   ```graphql
+   mutation CreateDepartment($name: String!, $subDepartment: [SubDepartmentDto!]) {
+       createDepartment(name: $name, subDepartment: $subDepartment) {
+           id
+           name
+           createdAt
+           updatedAt
+           user {
+               id
+               fullname
+           }
+           subDepartments {
+               id
+               name
+           }
+       }
+   }
+   ```
 
-## Stay in touch
+4. **Delete Department**
+   ```graphql
+   mutation DeleteDepartment($id: String!) {
+       deleteDepartment(id: $id) {
+           id
+           name
+           createdAt
+           updatedAt
+           user {
+               id
+               fullname
+           }
+           subDepartments {
+               id
+               name
+           }
+       }
+   }
+   ```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+5. **Update Department**
+   ```graphql
+   mutation UpdateDepartment($id: String!, $name: String!) {
+       updateDepartment(id: $id, name: $name) {
+           id
+           name
+           createdAt
+           updatedAt
+           user {
+               id
+               fullname
+           }
+           subDepartments {
+               id
+               name
+           }
+       }
+   }
+   ```
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### **Queries**
+
+1. **Get Department**
+   ```graphql
+   query GetDepartment($id: String!) {
+       getDepartment(id: $id) {
+           id
+           name
+           createdAt
+           updatedAt
+           user {
+               id
+               fullname
+           }
+           subDepartments {
+               id
+               name
+           }
+       }
+   }
+   ```
+
+2. **Get Departments**
+   ```graphql
+   query GetDepartments {
+       getDepartments {
+           id
+           name
+           createdAt
+           updatedAt
+           user {
+               id
+               fullname
+           }
+           subDepartments {
+               id
+               name
+           }
+       }
+   }
+   ```
+
+---
+
+## **Additional Notes**
+
+- **Database Setup**: Ensure your PostgreSQL server is running and the database specified in `DATABASE_URL` exists before running migrations.
+- **Testing the API**: Use tools like [Postman](https://www.postman.com/) or [cURL](https://curl.se/) to test API endpoints after the server starts.
+- **Environment Variable Management**: For secure management of secrets, consider using tools like [dotenv](https://www.npmjs.com/package/dotenv) for local development and environment variables for production deployment.
+
+---
+
+## **Troubleshooting**
+
+- **Docker Issues**: If Docker services fail to start, check for port conflicts or missing configurations in the `docker-compose.yml` file.
+- **Prisma Errors**: If migrations fail, ensure the database connection string (`DATABASE_URL`) is correct and accessible.
+- **Runtime Errors**: Check the logs for specific error messages and ensure all dependencies are properly installed.
