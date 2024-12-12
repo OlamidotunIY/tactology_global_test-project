@@ -1,3 +1,4 @@
+
 # **Backend Setup Instructions**
 
 Follow these steps to set up and run the backend project:
@@ -225,3 +226,12 @@ yarn start:dev
 - **Docker Issues**: If Docker services fail to start, check for port conflicts or missing configurations in the `docker-compose.yml` file.
 - **Prisma Errors**: If migrations fail, ensure the database connection string (`DATABASE_URL`) is correct and accessible.
 - **Runtime Errors**: Check the logs for specific error messages and ensure all dependencies are properly installed.
+
+---
+
+## **Hosted Versions**
+
+- **Frontend**: You can access the live frontend [here](https://tactology-global-test-project.vercel.app).
+- **Backend**: You can access the live backend [here](https://tactology-global-test-project.onrender.com).
+
+---
