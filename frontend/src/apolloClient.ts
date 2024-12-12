@@ -12,7 +12,6 @@ import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 import { useUserStore } from "./stores/userStore";
 import { onError } from "@apollo/client/link/error";
 import { GraphQLError } from "graphql";
-import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import Cookies from "js-cookie";
 
@@ -84,16 +83,6 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
   }
 });
 
-const wsLink = new WebSocketLink({
-  uri: `ws://localhost:3500/graphql`,
-  options: {
-    reconnect: true,
-    connectionParams: {
-      Authorization: `Bearer ${Cookies.get("access_token")}`,
-    },
-  },
-});
-
 const link = split(
   // Split based on operation type
   ({ query }) => {
@@ -103,7 +92,6 @@ const link = split(
       definition.operation === "subscription"
     );
   },
-  wsLink,
   ApolloLink.from([errorLink])
 );
 
