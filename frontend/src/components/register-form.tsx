@@ -20,6 +20,7 @@ import React from "react";
 import { GraphQLErrorExtensions } from "graphql";
 import { REGISTER_USER } from "@/graphql/mutations/Register";
 import { Loader2 } from "lucide-react";
+import Cookies from "js-cookie";
 
 const initialValues: RegisterDto = {
   username: "",
@@ -63,6 +64,11 @@ export function RegisterForm() {
             id: data.register.user.id,
             username: data.register.user.username,
           });
+          Cookies.set(
+            "tactology_global_access_token",
+            data.register.accessToken,
+            { expires: 7 }
+          );
         }
         router.push("/dashboard");
       },

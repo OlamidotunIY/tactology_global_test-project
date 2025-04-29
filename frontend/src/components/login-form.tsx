@@ -57,6 +57,7 @@ export function LoginForm() {
             id: data.login.user.id,
             username: data.login.user.username,
           });
+          Cookies.set("tactology_global_access_token", data.login.accessToken, { expires: 7 });
         }
         router.push("/dashboard");
       },
