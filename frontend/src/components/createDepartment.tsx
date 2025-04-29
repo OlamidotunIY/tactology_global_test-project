@@ -28,6 +28,7 @@ const initialData: DepartmentDto = {
 const CreateDepartment = () => {
   const [text, setText] = useState("");
   const [active, setActive] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const [createDepartment, { loading }] = useMutation(CREATE_DEPARTMENT);
   const handleSubmit = async (values: DepartmentDto) => {
@@ -39,6 +40,11 @@ const CreateDepartment = () => {
           subDepartment: values.subDepartment,
         },
       },
+      onCompleted: () => {
+        setIsOpen(false);
+        setText("");
+        setActive(false);
+      },
       refetchQueries: [{ query: GET_DEPARTMENTS }],
     }).catch((error) => {
       console.log(error);
@@ -46,9 +52,9 @@ const CreateDepartment = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Create Department</Button>
+        <Button onClick={() => setIsOpen(true)}>Create Department</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -153,7 +159,7 @@ const CreateDepartment = () => {
                   </div>
                 )}
               </FieldArray>
-              <DialogFooter>
+              <DialogFooter className="flex gap-x-3">
                 <Button type="submit" disabled={loading}>
                   {loading ? (
                     <>
@@ -163,6 +169,17 @@ const CreateDepartment = () => {
                   ) : (
                     "Save changes"
                   )}
+                </Button>
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    setText("");
+                    setActive(false);
+                  }}
+                >
+                  Cancel
                 </Button>
               </DialogFooter>
             </form>
