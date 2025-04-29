@@ -4,19 +4,25 @@ export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
     useFactory: async () => {
-      const dataSource = new DataSource({
-        type: 'postgres', // or another database type
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT, 10) || 5432,
-        username: process.env.DB_USERNAME,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        //  entities: [User, Wallet, Transaction, OTP], // Add User entity here
-        synchronize: true, // For dev only, don't use in production
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      });
+      try {
+        const dataSource = new DataSource({
+          type: 'postgres',
+          host: process.env.DB_HOST,
+          port: parseInt(process.env.DB_PORT, 10) || 5432,
+          username: process.env.DB_USERNAME,
+          password: process.env.DB_PASSWORD,
+          database: process.env.DB_NAME,
+          synchronize: process.env.NODE_ENV === 'production' ? false : true, // Set to false in production
+          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        });
 
-      return dataSource.initialize();
+        await dataSource.initialize();
+        console.log('Database connection established successfully');
+        return dataSource;
+      } catch (error) {
+        console.error('Database connection failed:', error.message);
+        throw error;
+      }
     },
   },
 ];
