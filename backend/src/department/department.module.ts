@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { DepartmentService } from './department.service';
 import { DepartmentResolver } from './department.resolver';
-import { PrismaService } from 'src/prisma.services';
-import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { departmentProviders } from './department.provider';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
-  providers: [DepartmentService, DepartmentResolver, PrismaService, JwtService],
+  providers: [DepartmentService, DepartmentResolver, JwtService, ...departmentProviders],
+  imports: [DatabaseModule],
 })
 export class DepartmentModule {}

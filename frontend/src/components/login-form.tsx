@@ -20,14 +20,15 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { GraphQLErrorExtensions } from "graphql";
 import Cookies from "js-cookie";
+import { Loader2 } from "lucide-react";
 
 const initialValues: LoginDto = {
-  email: "",
+  username: "",
   password: "",
 };
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email().required("Email is required"),
+  username: Yup.string().min(2, "").required("Username is required"),
   password: Yup.string().required("Password is required"),
 });
 
@@ -42,13 +43,11 @@ export function LoginForm() {
   const [errors, setErrors] = React.useState<GraphQLErrorExtensions>({});
   const [invalidCredentials, setInvalidCredentials] = React.useState("");
 
-  const handleSubmit = async (
-    values: LoginDto,
-  ) => {
+  const handleSubmit = async (values: LoginDto) => {
     setErrors({});
     await loginUser({
       variables: {
-        email: values.email,
+        username: values.username,
         password: values.password,
       },
       onCompleted: (data) => {
@@ -56,8 +55,7 @@ export function LoginForm() {
         if (data?.login.user) {
           setUser({
             id: data.login.user.id,
-            email: data.login.user.email,
-            fullname: data.login.user.fullname,
+            username: data.login.user.username,
           });
         }
         router.push("/dashboard");
@@ -102,14 +100,14 @@ export function LoginForm() {
           }) => (
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <InputField
-                error={errors.email || (errors?.email as string)}
-                showError={touched.email}
+                error={errors.username || (errors?.username as string)}
+                showError={touched.username}
                 type="text"
-                name="email"
+                name="username"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="m@example.com"
-                value={values.email}
+                placeholder="JohnD"
+                value={values.username}
               />
               <InputField
                 error={errors.password || (errors?.password as string)}
@@ -122,7 +120,14 @@ export function LoginForm() {
                 value={values.password}
               />
               <Button type="submit" className="w-full" disabled={isSubmitting}>
-                Login
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" />
+                    Logging in
+                  </>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </form>
           )}

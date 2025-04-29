@@ -1,21 +1,23 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '@prisma/client';
 import { Request, Response } from 'express';
-import { PrismaService } from 'src/prisma.services';
 import { LoginDto, RegisterDto } from './dto';
 import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject('USER_REPO')
+    private userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -34,10 +36,8 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
-    const userExist = await this.prisma.user.findUnique({
-      where: {
-        id: payload.sub,
-      },
+    const userExist = await this.userRepository.findOne({
+      where: { id: payload.sub },
     });
 
     if (!userExist) {
@@ -58,7 +58,7 @@ export class AuthService {
 
   private async issueTokens(user: User, response: Response) {
     const payload = {
-      username: user.fullname,
+      username: user.username,
       sub: user.id,
     };
 
@@ -76,23 +76,23 @@ export class AuthService {
 
     response.cookie('access_token', accessToken, {
       httpOnly: true,
-      sameSite: 'none',  // Allow cross-origin requests
-      secure: true,  // Ensure cookies are only sent over HTTPS in production
+      sameSite: 'none', // Allow cross-origin requests
+      secure: true, // Ensure cookies are only sent over HTTPS in production
     });
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: true,  // Ensure cookies are only sent over HTTPS in production
-      sameSite: 'none',  // Allow cross-origin requests
+      secure: true, // Ensure cookies are only sent over HTTPS in production
+      sameSite: 'none', // Allow cross-origin requests
     });
 
     return { user };
   }
 
   async validateUser(loginDto: LoginDto) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.userRepository.findOne({
       where: {
-        email: loginDto.email,
+        username: loginDto.username,
       },
     });
 
@@ -102,9 +102,9 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto, response: Response) {
-    const existingUser = await this.prisma.user.findUnique({
+    const existingUser = await this.userRepository.findOne({
       where: {
-        email: registerDto.email,
+        username: registerDto.username,
       },
     });
     if (existingUser) {
@@ -115,15 +115,14 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
-    const user = await this.prisma.user.create({
-      data: {
-        fullname: registerDto.fullname,
-        password: hashedPassword,
-        email: registerDto.email,
-      },
+    const user = this.userRepository.create({
+      username: registerDto.username,
+      password: hashedPassword,
     });
 
-    return this.issueTokens(user, response);
+    const savedUser = await this.userRepository.save(user);
+
+    return this.issueTokens(savedUser, response);
   }
 
   async login(loginDto: LoginDto, response: Response) {

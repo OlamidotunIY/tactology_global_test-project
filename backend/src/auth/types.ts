@@ -1,5 +1,5 @@
 import { ObjectType, Field } from '@nestjs/graphql';
-import { User } from 'src/user/user.types';
+import { User } from 'src/user/user.entity';
 
 @ObjectType()
 export class RegisterResponse {
@@ -11,5 +11,4 @@ export class RegisterResponse {
 export class LoginResponse {
   @Field(() => User, { nullable: true })
   user: User;
-  
 }

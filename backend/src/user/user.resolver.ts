@@ -3,7 +3,7 @@ import { UserService } from './user.service';
 import { Request } from 'express';
 import { UseGuards } from '@nestjs/common';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
-import { User } from './user.types';
+import { User } from './user.entity';
 
 @Resolver()
 export class UserResolver {
@@ -12,10 +12,10 @@ export class UserResolver {
   @UseGuards(GraphqlAuthGuard)
   @Mutation(() => User)
   async updateProfile(
-    @Args('fullname') fullname: string,
+    @Args('username') username: string,
     @Context() context: { req: Request },
   ) {
     const userId = context.req.user.sub;
-    return this.userService.updateProfile(userId, fullname);
+    return this.userService.updateProfile(userId, username);
   }
 }

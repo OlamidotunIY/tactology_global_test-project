@@ -7,13 +7,19 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DeleteResponse {
+  message: String
+  success: Boolean!
+}
+
 type Department {
   createdAt: DateTime
-  id: ID
+  id: String!
   name: String
   subDepartments: [SubDepartment!]
   updatedAt: DateTime
   user: User
+  userId: String!
 }
 
 input DepartmentDto {
@@ -22,8 +28,8 @@ input DepartmentDto {
 }
 
 input LoginDto {
-  email: String!
   password: String!
+  username: String!
 }
 
 type LoginResponse {
@@ -31,32 +37,38 @@ type LoginResponse {
 }
 
 type Mutation {
-  createDepartment(data: DepartmentDto!): Department!
-  createSubDepartment(departmentId: Float!, name: String!): SubDepartment!
-  deleteDepartment(id: String!): Department!
-  deleteSubDepartment(id: String!): SubDepartment!
+  createDepartment(input: DepartmentDto!): Department!
+  createSubDepartment(dto: SubDepartmentDto!): SubDepartment!
+  deleteDepartment(id: String!): DeleteResponse!
+  deleteSubDepartment(id: Float!): SubDepartment!
   login(loginInput: LoginDto!): LoginResponse!
   logout: String!
   refreshToken: String!
   register(registerInput: RegisterDto!): RegisterResponse!
   updateDepartment(id: String!, name: String!): Department!
-  updateProfile(fullname: String!): User!
-  updateSubDepartment(id: String!, name: String!): SubDepartment!
+  updateProfile(username: String!): User!
+  updateSubDepartment(id: Float!, name: String!): SubDepartment!
+}
+
+type PaginatedDepartments {
+  data: [Department!]!
+  lastPage: Int!
+  page: Int!
+  total: Int!
 }
 
 type Query {
   getDepartment(id: String!): Department!
-  getDepartments: [Department!]!
-  getSubDepartment(id: String!): SubDepartment!
+  getDepartments(limit: Int! = 10, page: Int! = 1): PaginatedDepartments!
+  getSubDepartment(id: Float!): SubDepartment!
   getSubDepartments(departmentId: Float!): [SubDepartment!]!
   hello: String!
 }
 
 input RegisterDto {
   confirmPassword: String!
-  email: String!
-  fullname: String!
   password: String!
+  username: String!
 }
 
 type RegisterResponse {
@@ -65,21 +77,23 @@ type RegisterResponse {
 
 type SubDepartment {
   createdAt: DateTime
-  department: Department
-  id: ID
+  department: Department!
+  departmentId: String!
+  id: String!
   name: String
   updatedAt: DateTime
 }
 
 input SubDepartmentDto {
+  departmentId: Float
   name: String!
 }
 
 type User {
   createdAt: DateTime
-  email: String
-  fullname: String
-  id: Int
+  departments: [Department!]
+  id: String!
   password: String
   updatedAt: DateTime
+  username: String
 }

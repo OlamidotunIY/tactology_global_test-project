@@ -11,6 +11,7 @@ import { DepartmentModule } from './department/department.module';
 import { SubDepartmentModule } from './sub-department/sub-department.module';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { TokenService } from './token/token.service';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { TokenService } from './token/token.service';
     }),
     DepartmentModule,
     SubDepartmentModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService, TokenService],

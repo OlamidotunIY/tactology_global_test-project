@@ -3,8 +3,8 @@ import { SubDepartmentService } from './sub-department.service';
 import { UseFilters, UseGuards } from '@nestjs/common';
 import { GraphQLErrorFilter } from 'src/filters/custom-exception.filter';
 import { GraphqlAuthGuard } from 'src/auth/graphql-auth.guard';
-import { Request } from 'express';
-import { SubDepartment } from './sub-department.types';
+import { SubDepartment } from './sub-department.entity';
+import { SubDepartmentDto } from './dto';
 
 @Resolver()
 export class SubDepartmentResolver {
@@ -13,28 +13,25 @@ export class SubDepartmentResolver {
   @UseFilters(GraphQLErrorFilter)
   @UseGuards(GraphqlAuthGuard)
   @Mutation(() => SubDepartment)
-  async createSubDepartment(
-    @Args('name') name: string,
-    @Args('departmentId') departmentId: number,
-  ) {
-    return this.subDepartmentService.createSubDepartment(name, departmentId);
+  async createSubDepartment(@Args('dto') dto: SubDepartmentDto) {
+    return this.subDepartmentService.createSubDepartment(dto);
   }
 
   @Mutation(() => SubDepartment)
   async updateSubDepartment(
-    @Args('id') id: string,
+    @Args('id') id: number,
     @Args('name') name: string,
   ) {
     return this.subDepartmentService.updateSubDepartment(id, name);
   }
 
   @Mutation(() => SubDepartment)
-  async deleteSubDepartment(@Args('id') id: string) {
+  async deleteSubDepartment(@Args('id') id: number) {
     return this.subDepartmentService.deleteSubDepartment(id);
   }
 
   @Query(() => SubDepartment)
-  async getSubDepartment(@Args('id') id: string) {
+  async getSubDepartment(@Args('id') id: number) {
     return this.subDepartmentService.getSubDepartment(id);
   }
 

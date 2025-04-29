@@ -8,4 +8,8 @@ export class SubDepartmentDto {
   @IsString({ message: 'Name must be a string.' })
   @MinLength(2, { message: 'Name must be at least 2 characters.' })
   name: string;
+
+  @Field({ nullable: true })
+  @IsNotEmpty({ message: 'Department ID is required.' })
+  departmentId: number;
 }

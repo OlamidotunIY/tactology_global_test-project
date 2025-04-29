@@ -14,11 +14,11 @@ import { DepartmentDto } from "@/gql/graphql";
 import { FieldArray, Formik } from "formik";
 import { InputField } from "./InputField";
 import { useState } from "react";
-import { LucideTrash, PlusIcon } from "lucide-react";
+import { Loader2, LucideTrash, PlusIcon } from "lucide-react";
 import { useMutation } from "@apollo/client";
 import { CREATE_DEPARTMENT } from "@/graphql/mutations/createDepartment";
 import { GET_DEPARTMENTS } from "@/graphql/quaries/GetDepartments";
-import * as Yup from "yup"
+import * as Yup from "yup";
 
 const initialData: DepartmentDto = {
   name: "",
@@ -34,8 +34,10 @@ const CreateDepartment = () => {
     console.log(values);
     await createDepartment({
       variables: {
-        name: values.name,
-        subDepartment: values.subDepartment,
+        input: {
+          name: values.name,
+          subDepartment: values.subDepartment,
+        },
       },
       refetchQueries: [{ query: GET_DEPARTMENTS }],
     }).catch((error) => {
@@ -59,10 +61,17 @@ const CreateDepartment = () => {
           initialValues={initialData}
           onSubmit={handleSubmit}
           validationSchema={Yup.object().shape({
-            name: Yup.string().required("Department Name is required").min(2, "Sub Department Name must be at least 2 characters long"),
+            name: Yup.string()
+              .required("Department Name is required")
+              .min(2, "Sub Department Name must be at least 2 characters long"),
             subDepartment: Yup.array().of(
               Yup.object().shape({
-                name: Yup.string().required("Sub Department Name is required").min(2, "Sub Department Name must be at least 2 characters long")
+                name: Yup.string()
+                  .required("Sub Department Name is required")
+                  .min(
+                    2,
+                    "Sub Department Name must be at least 2 characters long"
+                  ),
               })
             ),
           })}
@@ -145,7 +154,16 @@ const CreateDepartment = () => {
                 )}
               </FieldArray>
               <DialogFooter>
-                <Button type="submit" disabled={loading}>Save changes</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save changes"
+                  )}
+                </Button>
               </DialogFooter>
             </form>
           )}

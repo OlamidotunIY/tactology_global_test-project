@@ -26,22 +26,10 @@ import {
 import CreateDepartment from "./createDepartment";
 import UpdateDepartment from "./updateDepartment";
 
-
 export const DepartmentList = () => {
   const [id, setId] = useState<string | null>(null);
   const { data, loading, error } =
     useQuery<GetDepartmentsQuery>(GET_DEPARTMENTS);
-
-  const [deleteDepartment] = useMutation(DELETE_DEPARTMENT, {
-    variables: { id },
-    refetchQueries: [{ query: GET_DEPARTMENTS }],
-  });
-
-  const handleDelete = async () => {
-    await deleteDepartment().catch((error) => {
-      console.log(error);
-    });
-  };
 
   if (loading)
     return (
@@ -57,7 +45,7 @@ export const DepartmentList = () => {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  if (data?.getDepartments?.length === 0)
+  if (data?.getDepartments?.data.length === 0)
     return (
       <div className="w-full flex h-[80vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -71,13 +59,11 @@ export const DepartmentList = () => {
       <div className="mt-2 mb-5">
         <CreateDepartment />
       </div>
-      {data?.getDepartments?.map((department) => (
+      {data?.getDepartments?.data.map((department) => (
         <DepartmentItem
           key={department.id}
-          id={department.id as string}
+          id={department.id.toString()}
           name={department.name as string}
-          setId={setId}
-          handleDelete={handleDelete}
           subDepartment={department.subDepartments as []}
         />
       ))}
@@ -88,16 +74,20 @@ export const DepartmentList = () => {
 const DepartmentItem = ({
   id,
   name,
-  setId,
-  handleDelete,
   subDepartment,
 }: {
   id: string;
   name: string;
-  setId: Dispatch<string | null>;
-  handleDelete: () => void;
   subDepartment: [];
 }) => {
+  const [deleteDepartment] = useMutation(DELETE_DEPARTMENT, {
+    refetchQueries: [{ query: GET_DEPARTMENTS }],
+  });
+  const handleDelete = async () => {
+    await deleteDepartment({
+      variables: { id },
+    });
+  };
   return (
     <Collapsible className="w-full">
       <div className="w-full p-3 shadow-sm">
@@ -114,7 +104,6 @@ const DepartmentItem = ({
                   <Button
                     variant={"destructive"}
                     size={"icon"}
-                    onClick={() => setId(id)}
                   >
                     <Trash />
                   </Button>

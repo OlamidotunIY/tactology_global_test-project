@@ -19,21 +19,19 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { GraphQLErrorExtensions } from "graphql";
 import { REGISTER_USER } from "@/graphql/mutations/Register";
-import Cookies from "js-cookie";
+import { Loader2 } from "lucide-react";
 
 const initialValues: RegisterDto = {
-  email: "",
-  fullname: "",
+  username: "",
   password: "",
   confirmPassword: "",
 };
 
 const RegisterSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().required("Password is required"),
-  fullname: Yup.string()
+  username: Yup.string()
     .required("Full Name is required")
-    .min(8, "Full Name must be at least 8 characters"),
+    .min(2, "Full Name must be at least 8 characters"),
   confirmPassword: Yup.string()
     .required("Confirm password is required")
     .oneOf([Yup.ref("password")], "Passwords must match"),
@@ -49,15 +47,12 @@ export function RegisterForm() {
 
   const [Errors, setErrors] = React.useState<GraphQLErrorExtensions>({});
 
-  const handleSubmit = async (
-    values: RegisterDto,
-  ) => {
+  const handleSubmit = async (values: RegisterDto) => {
     setErrors({});
     await registerUser({
       variables: {
-        email: values.email,
         password: values.password,
-        fullname: values.fullname,
+        username: values.username,
         confirmPassword: values.confirmPassword,
       },
       onCompleted: (data) => {
@@ -66,14 +61,13 @@ export function RegisterForm() {
         if (data?.register.user) {
           setUser({
             id: data.register.user.id,
-            email: data.register.user.email,
-            fullname: data.register.user.fullname,
+            username: data.register.user.username,
           });
         }
         router.push("/dashboard");
       },
     }).catch((error) => {
-      console.log(error.graphQLErrors, "ERROR")
+      console.log(error.graphQLErrors, "ERROR");
       setErrors(error.graphQLErrors[0]?.extensions);
     });
   };
@@ -81,9 +75,7 @@ export function RegisterForm() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">
-          Register
-        </CardTitle>
+        <CardTitle className="text-2xl">Register</CardTitle>
         <CardDescription>
           Enter your details below to register for an account
         </CardDescription>
@@ -106,27 +98,17 @@ export function RegisterForm() {
           }) => (
             <form className="grid gap-4" onSubmit={handleSubmit}>
               <InputField
-                error={errors.email || Errors?.email as string}
-                showError={touched.email}
+                error={errors.username || (Errors?.fullname as string)}
+                showError={touched.username}
                 type="text"
-                name="email"
+                name="username"
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="m@example.com"
-                value={values.email}
+                placeholder="JohnD"
+                value={values.username}
               />
               <InputField
-                error={errors.fullname || Errors?.fullname as string}
-                showError={touched.fullname}
-                type="text"
-                name="fullname"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="John doe"
-                value={values.fullname}
-              />
-              <InputField
-                error={errors.password || Errors?.password as string}
+                error={errors.password || (Errors?.password as string)}
                 showError={touched.password}
                 type="password"
                 name="password"
@@ -136,7 +118,9 @@ export function RegisterForm() {
                 value={values.password}
               />
               <InputField
-                error={errors.confirmPassword || Errors?.confirmPassword as string}
+                error={
+                  errors.confirmPassword || (Errors?.confirmPassword as string)
+                }
                 showError={touched.confirmPassword}
                 type="password"
                 name="confirmPassword"
@@ -146,7 +130,14 @@ export function RegisterForm() {
                 value={values.confirmPassword}
               />
               <Button type="submit" className="w-full" disabled={loading}>
-                Register
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" />
+                    Registring
+                  </>
+                ) : (
+                  "Register"
+                )}
               </Button>
             </form>
           )}

@@ -9,7 +9,7 @@ export const GET_DEPARTMENT = gql`
       updatedAt
       user {
         id
-        fullname
+        username
       }
       subDepartments {
         id

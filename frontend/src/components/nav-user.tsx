@@ -46,9 +46,8 @@ export function NavUser() {
   const handleLogout = async () => {
     await logoutUser();
     setUser({
-      id: undefined,
-      fullname: "",
-      email: "",
+      id: "",
+      username: "",
     });
   };
 
@@ -62,9 +61,9 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={"avatars/shadcn.jpg"} alt={user?.fullname} />
+                <AvatarImage src={"avatars/shadcn.jpg"} alt={user?.username} />
                 <AvatarFallback className="rounded-lg">
-                  {user?.fullname
+                  {user?.username
                     .split(" ")
                     .map((n) => n[0])
                     .join("")
@@ -72,8 +71,7 @@ export function NavUser() {
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user?.fullname}</span>
-                <span className="truncate text-xs">{user?.email}</span>
+                <span className="truncate font-semibold">{user?.username}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -89,10 +87,10 @@ export function NavUser() {
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
                     src={"avatars/shadcn.jpg"}
-                    alt={user?.fullname}
+                    alt={user?.username}
                   />
                   <AvatarFallback className="rounded-lg">
-                    {user?.fullname
+                    {user?.username
                       .split(" ")
                       .map((n) => n[0])
                       .join("")
@@ -101,9 +99,8 @@ export function NavUser() {
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    {user.fullname}
+                    {user.username}
                   </span>
-                  <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
