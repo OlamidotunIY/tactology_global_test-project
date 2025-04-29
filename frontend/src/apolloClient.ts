@@ -75,8 +75,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
       console.log("refresh token not found!");
       useUserStore.setState({
         id: undefined,
-        fullname: "",
-        email: "",
+        username: "",
       });
     }
   }
