@@ -11,7 +11,6 @@ Ensure you have the following installed on your machine:
 
 - [Node.js](https://nodejs.org/) (v14 or higher)
 - [Yarn](https://yarnpkg.com/) (latest stable version)
-- [Docker](https://www.docker.com/) (for containerized services like PostgreSQL)
 - [Prisma CLI](https://www.prisma.io/docs/getting-started/quickstart) (for database migrations)
 
 ---
@@ -43,34 +42,7 @@ yarn install
 
 ---
 
-### **3. Edit `docker-compose.yml`**
-
-- Ensure the `docker-compose.yml` file has the correct configuration for your database and other services.
-- Update any ports, volumes, or environment variables as necessary to match your local setup.
-
----
-
-### **4. Run Prisma Migrations**
-
-Generate the database schema by running the following command:
-
-```bash
-npx prisma migrate dev
-```
-
----
-
-### **5. Start Docker Services**
-
-Start the PostgreSQL and Redis services (or any other dependencies) using Docker:
-
-```bash
-docker-compose up
-```
-
----
-
-### **6. Start the Development Server**
+### **3. Start the Development Server**
 
 Run the project in development mode using Yarn:
 
@@ -90,8 +62,7 @@ yarn start:dev
        register {
            user {
                id
-               fullname
-               email
+               username
            }
        }
    }
@@ -102,7 +73,7 @@ yarn start:dev
    mutation UpdateProfile($fullname: String!) {
        updateProfile(fullname: $fullname) {
            id
-           fullname
+           username
        }
    }
    ```
@@ -117,7 +88,7 @@ yarn start:dev
            updatedAt
            user {
                id
-               fullname
+               username
            }
            subDepartments {
                id
@@ -131,18 +102,7 @@ yarn start:dev
    ```graphql
    mutation DeleteDepartment($id: String!) {
        deleteDepartment(id: $id) {
-           id
-           name
-           createdAt
-           updatedAt
-           user {
-               id
-               fullname
-           }
-           subDepartments {
-               id
-               name
-           }
+           message
        }
    }
    ```
@@ -157,7 +117,7 @@ yarn start:dev
            updatedAt
            user {
                id
-               fullname
+               username
            }
            subDepartments {
                id
@@ -181,7 +141,7 @@ yarn start:dev
            updatedAt
            user {
                id
-               fullname
+               username
            }
            subDepartments {
                id
@@ -201,7 +161,7 @@ yarn start:dev
            updatedAt
            user {
                id
-               fullname
+               username
            }
            subDepartments {
                id
@@ -210,28 +170,11 @@ yarn start:dev
        }
    }
    ```
-
----
-
-## **Additional Notes**
-
-- **Database Setup**: Ensure your PostgreSQL server is running and the database specified in `DATABASE_URL` exists before running migrations.
-- **Testing the API**: Use tools like [Postman](https://www.postman.com/) or [cURL](https://curl.se/) to test API endpoints after the server starts.
-- **Environment Variable Management**: For secure management of secrets, consider using tools like [dotenv](https://www.npmjs.com/package/dotenv) for local development and environment variables for production deployment.
-
----
-
-## **Troubleshooting**
-
-- **Docker Issues**: If Docker services fail to start, check for port conflicts or missing configurations in the `docker-compose.yml` file.
-- **Prisma Errors**: If migrations fail, ensure the database connection string (`DATABASE_URL`) is correct and accessible.
-- **Runtime Errors**: Check the logs for specific error messages and ensure all dependencies are properly installed.
-
 ---
 
 ## **Hosted Versions**
 
-- **Frontend**: You can access the live frontend [here](https://tactology-global-test-project.vercel.app).
+- **Frontend**: You can access the live frontend [here](https://tactology-global-test-project-frontend.onrender.com).
 - **Backend**: You can access the live backend [here](https://tactology-global-test-project.onrender.com).
 
 ---
