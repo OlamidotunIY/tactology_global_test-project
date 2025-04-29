@@ -79,20 +79,18 @@ export class AuthService {
       expiresIn: '7d',
     });
 
-    response.cookie('access_token', accessToken, {
+    response.cookie('tactology_global_access_token', accessToken, {
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
       sameSite: 'none',
       secure: true,
-      domain: "tactology-global-test-project.onrender.com"
     });
 
-    response.cookie('refresh_token', refreshToken, {
+    response.cookie('tactology_global_refresh_token', refreshToken, {
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000,
       sameSite: 'none',
       secure: true,
-      domain: "tactology-global-test-project.onrender.com"
     });
 
     return { user };
@@ -145,8 +143,8 @@ export class AuthService {
   }
 
   async logout(response: Response) {
-    response.clearCookie('access_token');
-    response.clearCookie('refresh_token');
+    response.clearCookie('tactology_global_access_token');
+    response.clearCookie('tactology_global_refresh_token');
     return 'Successfully logged out';
   }
 }
