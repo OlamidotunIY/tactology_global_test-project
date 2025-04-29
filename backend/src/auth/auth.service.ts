@@ -93,7 +93,7 @@ export class AuthService {
       secure: true,
     });
 
-    return { user };
+    return { user, accessToken };
   }
 
   async validateUser(loginDto: LoginDto) {

@@ -33,6 +33,7 @@ input LoginDto {
 }
 
 type LoginResponse {
+  accessToken: String!
   user: User
 }
 
@@ -72,6 +73,7 @@ input RegisterDto {
 }
 
 type RegisterResponse {
+  accessToken: String!
   user: User
 }
 

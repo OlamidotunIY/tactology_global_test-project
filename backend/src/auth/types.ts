@@ -5,10 +5,16 @@ import { User } from 'src/user/user.entity';
 export class RegisterResponse {
   @Field(() => User, { nullable: true })
   user?: User;
+
+  @Field()
+  accessToken: string;
 }
 
 @ObjectType()
 export class LoginResponse {
   @Field(() => User, { nullable: true })
   user: User;
+
+  @Field()
+  accessToken: string;
 }
