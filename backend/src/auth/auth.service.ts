@@ -52,7 +52,12 @@ export class AuthService {
         secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
       },
     );
-    res.cookie('access_token', accessToken, { httpOnly: true });
+    res.cookie('access_token', accessToken, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: 'none',
+      secure: true,
+    });
     return accessToken;
   }
 
@@ -76,14 +81,16 @@ export class AuthService {
 
     response.cookie('access_token', accessToken, {
       httpOnly: true,
-      sameSite: 'none', // Allow cross-origin requests
-      secure: true, // Ensure cookies are only sent over HTTPS in production
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: 'none',
+      secure: true,
     });
 
     response.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: true, // Ensure cookies are only sent over HTTPS in production
-      sameSite: 'none', // Allow cross-origin requests
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: 'none',
+      secure: true,
     });
 
     return { user };
